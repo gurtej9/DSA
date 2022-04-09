@@ -1,0 +1,196 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeSet;
+import java.util.TreeMap;
+import java.util.PriorityQueue;
+import java.util.Collections;
+import java.util.Stack;
+
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.Iterator;
+
+public class First {
+
+    public static void main(String[] args) {
+        FastScanner fs = new FastScanner();
+        int T = fs.nextInt();
+        for (int tt = 0; tt < T; tt++) {
+
+            solve(fs);
+        }
+        
+    }
+    static void solve(FastScanner fs)
+    {
+        int n=fs.nextInt(), B=fs.nextInt(), x=fs.nextInt(), y=fs.nextInt();
+
+        long[] arr=new long[n+1];
+        arr[0]=0;
+        long sum=0;
+        for(int i=1;i<=n;++i)
+        {
+            if(arr[i-1]+x <= (long)B)
+            {
+                arr[i]=arr[i-1]+x;
+            }
+            else
+            {
+                arr[i]=arr[i-1]-y;
+            }
+
+            sum+=arr[i];
+        }
+
+
+        pn(sum);
+    }
+    static long MOD=(long)(1e9+7);
+    
+    static long gcd(long a, long b) 
+    {
+        if (a == 0)
+            return b;    
+        return gcd(b%a, a);
+    }
+    static void pn(Object o) { System.out.println(o); } 
+    static void p(Object o) { System.out.print(o); }
+    static void flush() { System.out.flush(); }
+
+    static void debugInt(int[] arr)
+    {
+        for(int i=0;i<arr.length;++i)
+            System.out.print(arr[i]+" ");
+        System.out.println();
+    }
+    static void debugIntInt(int[][] arr)
+    {
+        for(int i=0;i<arr.length;++i)
+        {
+            for(int j=0;j<arr[0].length;++j)
+                System.out.print(arr[i][j]+" ");
+            System.out.println();
+        }
+        System.out.println();
+    }
+    static void debugLong(long[] arr)
+    {
+        for(int i=0;i<arr.length;++i)
+            System.out.print(arr[i]+" ");
+        System.out.println();
+    }
+    static void debugLongLong(long[][] arr)
+    {
+        for(int i=0;i<arr.length;++i)
+        {
+            for(int j=0;j<arr[0].length;++j)
+                System.out.print(arr[i][j]+" ");
+            System.out.println();
+        }
+        System.out.println();
+    }
+    static long[] takeLong(int n, FastScanner fs)
+    {
+        long[] arr=new long[n];
+        for(int i=0;i<n;++i)
+            arr[i]=fs.nextLong();
+        return arr;
+    } 
+    static long[][] takeLongLong(int m, int n, FastScanner fs)
+    {
+        long[][] arr=new long[m][n];
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j)
+                arr[i][j]=fs.nextLong();
+        return arr;
+    } 
+    static int[] takeInt(int n, FastScanner fs)
+    {
+        int[] arr=new int[n];
+        for(int i=0;i<n;++i)
+            arr[i]=fs.nextInt();
+        return arr;
+    } 
+    static int[][] takeIntInt(int m, int n, FastScanner fs)
+    {
+        int[][] arr=new int[m][n];
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j)
+                arr[i][j]=fs.nextInt();
+        return arr;
+    } 
+    static void sort(int[] a) {
+        ArrayList<Integer> l=new ArrayList<>();
+        for (int i:a) l.add(i);
+        Collections.sort(l);
+        for (int i=0; i<a.length; i++) a[i]=l.get(i);
+    }
+    static int getDecimalFromBinary(String s)
+    {
+        long no=0;
+        for(int i=0;i<s.length();i++)
+        {
+            if(s.charAt(i)=='1')
+                no++;
+            no=no<<1;
+        }
+        return (int)(no>>1);
+    }
+    static String getBinaryFromDecimal(int x)
+    {
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<31;++i)
+        {
+            if((x&1)==0)
+                sb.append('0');
+            else
+                sb.append('1');
+            x=x>>1;
+        }
+        return sb.reverse().toString();
+    }
+    static boolean[] sieve()
+    {
+        int size=(int)(1e5+5);
+        boolean[] isPrime=new boolean[size];
+        Arrays.fill(isPrime, true);
+        for(int i=2;i<size;++i)
+            for(int j=2*i;isPrime[i]==true && j<size;j+=i)
+                isPrime[j]=false;
+
+        return isPrime;
+    }
+    static class FastScanner {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer("");
+        String next() {
+            while (!st.hasMoreTokens())
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+    }
+
+
+}
+class Pair
+{
+    
+}

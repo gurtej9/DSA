@@ -1,0 +1,49 @@
+/*
+        int n=fs.nextInt();
+        ArrayList<ArrayList<Integer>> g=new ArrayList<>();
+        for(int i=0;i<n;++i)
+        {
+            g.add(new ArrayList<>());
+        }
+
+        for(int[] e: edge)
+        {
+            int u=e[0], v=e[1];
+            g.get(u).add(v);
+            g.get(v).add(u);
+        }
+        boolean[] vis=new boolean[n];
+        for(int i=0;i<n;++i)
+        {
+            if(!vis[i])
+            {
+                dfs(g, i, -1, vis);
+            }
+        }
+
+    */
+    static void bfs(ArrayList<ArrayList<Integer>> g, int u, boolean[] vis)
+    {
+        
+        Queue<Integer> q=new LinkedList<>();
+        q.add(u);
+
+        while(!q.isEmpty())
+        {
+            int sz=q.size();
+            while(sz-->0)
+            {
+                int rem=q.remove();
+                if(vis[rem])
+                    continue;
+                vis[rem]=true;
+
+                ArrayList<Integer> nbrs=new ArrayList<>();
+                for(int i=0;i<nbrs.size();++i)
+                {
+                    int child=nbrs.get(i);
+                    q.add(child);
+                }
+            }
+        }
+    }

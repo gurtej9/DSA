@@ -38,7 +38,7 @@
                     continue;
                 vis[rem]=true;
 
-                ArrayList<Integer> nbrs=new ArrayList<>();
+                ArrayList<Integer> nbrs=g.get(u);
                 for(int i=0;i<nbrs.size();++i)
                 {
                     int child=nbrs.get(i);

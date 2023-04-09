@@ -1,6 +1,7 @@
 public void sieve(boolean[] isPrime)
 {
     int n;
+    Arrays.fill(irPrime, true);
     isPrime[0]=false;
     isPrime[1]=false;
     for (int i = 2; i * i < isPrime.length; i++) 

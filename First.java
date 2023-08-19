@@ -30,27 +30,8 @@ public class First {
     }
     static void solve(FastScanner fs)
     {
-        int n=fs.nextInt(), B=fs.nextInt(), x=fs.nextInt(), y=fs.nextInt();
-
-        long[] arr=new long[n+1];
-        arr[0]=0;
-        long sum=0;
-        for(int i=1;i<=n;++i)
-        {
-            if(arr[i-1]+x <= (long)B)
-            {
-                arr[i]=arr[i-1]+x;
-            }
-            else
-            {
-                arr[i]=arr[i-1]-y;
-            }
-
-            sum+=arr[i];
-        }
-
-
-        pn(sum);
+        
+        pn("welcome");
     }
     static long MOD=(long)(1e9+7);
     

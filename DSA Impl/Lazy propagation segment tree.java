@@ -1,55 +1,114 @@
-void updateRange(int node, int start, int end, int l, int r, int val)
-{
-    if(lazy[node] != 0)
-    { 
-        // This node needs to be updated
-        tree[node] += (end - start + 1) * lazy[node];    // Update it
-        if(start != end)
-        {
-            lazy[node*2] += lazy[node];                  // Mark child as lazy
-            lazy[node*2+1] += lazy[node];                // Mark child as lazy
-        }
-        lazy[node] = 0;                                  // Reset it
-    }
-    if(start > end or start > r or end < l)              // Current segment is not within range [l, r]
-        return;
-    if(start >= l and end <= r)
-    {
-        // Segment is fully within range
-        tree[node] += (end - start + 1) * val;
-        if(start != end)
-        {
-            // Not leaf node
-            lazy[node*2] += val;
-            lazy[node*2+1] += val;
-        }
-        return;
-    }
-    int mid = (start + end) / 2;
-    updateRange(node*2, start, mid, l, r, val);        // Updating left child
-    updateRange(node*2 + 1, mid + 1, end, l, r, val);   // Updating right child
-    tree[node] = tree[node*2] + tree[node*2+1];        // Updating root with max value 
-}
+class SegmentTree {
 
-int queryRange(int node, int start, int end, int l, int r)
-{
-    if(start > end or start > r or end < l)
-        return 0;         // Out of range
-    if(lazy[node] != 0)
-    {
-        // This node needs to be updated
-        tree[node] += (end - start + 1) * lazy[node];            // Update it
-        if(start != end)
-        {
-            lazy[node*2] += lazy[node];         // Mark child as lazy
-            lazy[node*2+1] += lazy[node];    // Mark child as lazy
+    int[] segmentTree;
+    int[] lazy;
+    int n;
+
+    public SegmentTree(int[] arr) {
+
+        n = arr.length;
+        segmentTree = new int[4 * arr.length];
+        lazy = new int[4 * arr.length];
+        for (int i = 0; i < segmentTree.length; i++) {
+            segmentTree[i] = 0;
         }
-        lazy[node] = 0;                 // Reset it
+        build(arr, 0, arr.length - 1, 0);
     }
-    if(start >= l and end <= r)             // Current segment is totally within range [l, r]
-        return tree[node];
-    int mid = (start + end) / 2;
-    int p1 = queryRange(node*2, start, mid, l, r);         // Query left child
-    int p2 = queryRange(node*2 + 1, mid + 1, end, l, r); // Query right child
-    return (p1 + p2);
+    
+    public void updateSegmentTreeRangeLazy(int startRange, int endRange, int delta) {
+        updateSegmentTreeRangeLazy(startRange, endRange, delta, 0,
+            n - 1, 0);
+    }
+
+    public int rangeMinimumQueryLazy(int qlow, int qhigh) {
+        return rangeMinimumQueryLazy(qlow, qhigh, 0, n - 1, 0);
+    }
+
+    private void build(int[] input, int low, int high, int pos) {
+        if (low == high) {
+            segmentTree[pos] = input[low];
+            return;
+        }
+        int mid = (low + high) / 2;
+        build(input, low, mid, 2 * pos + 1);
+        build(input, mid + 1, high, 2 * pos + 2);
+        segmentTree[pos] = Math.min(segmentTree[2 * pos + 1], segmentTree[2 * pos + 2]);
+    }
+
+    private void updateSegmentTreeRangeLazy(int startRange, int endRange,
+        int delta, int low, int high, int pos) {
+        if (low > high) {
+            return;
+        }
+
+        //make sure all propagation is done at pos. If not update tree
+        //at pos and mark its children for lazy propagation.
+        if (lazy[pos] != 0) {
+            segmentTree[pos] += lazy[pos];
+            if (low != high) { //not a leaf node
+                lazy[2 * pos + 1] += lazy[pos];
+                lazy[2 * pos + 2] += lazy[pos];
+            }
+            lazy[pos] = 0;
+        }
+
+        //no overlap condition
+        if (startRange > high || endRange < low) {
+            return;
+        }
+
+        //total overlap condition
+        if (startRange <= low && endRange >= high) {
+            segmentTree[pos] += delta;
+            if (low != high) {
+                lazy[2 * pos + 1] += delta;
+                lazy[2 * pos + 2] += delta;
+            }
+            return;
+        }
+
+        //otherwise partial overlap so look both left and right.
+        int mid = (low + high) / 2;
+        updateSegmentTreeRangeLazy(startRange, endRange,
+            delta, low, mid, 2 * pos + 1);
+        updateSegmentTreeRangeLazy(startRange, endRange,
+            delta, mid + 1, high, 2 * pos + 2);
+        segmentTree[pos] = Math.min(segmentTree[2 * pos + 1], segmentTree[2 * pos + 2]);
+    }
+
+    private int rangeMinimumQueryLazy(int qlow, int qhigh,
+        int low, int high, int pos) {
+
+        if (low > high) {
+            return Integer.MAX_VALUE;
+        }
+
+        //make sure all propagation is done at pos. If not update tree
+        //at pos and mark its children for lazy propagation.
+        if (lazy[pos] != 0) {
+            segmentTree[pos] += lazy[pos];
+            if (low != high) { //not a leaf node
+                lazy[2 * pos + 1] += lazy[pos];
+                lazy[2 * pos + 2] += lazy[pos];
+            }
+            lazy[pos] = 0;
+        }
+
+        //no overlap
+        if (qlow > high || qhigh < low) {
+            return Integer.MAX_VALUE;
+        }
+
+        //total overlap
+        if (qlow <= low && qhigh >= high) {
+            return segmentTree[pos];
+        }
+
+        //partial overlap
+        int mid = (low + high) / 2;
+        return Math.min(rangeMinimumQueryLazy(qlow, qhigh,
+                low, mid, 2 * pos + 1),
+            rangeMinimumQueryLazy(qlow, qhigh,
+                mid + 1, high, 2 * pos + 2));
+    }
 }
